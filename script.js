@@ -61,3 +61,8 @@ ctx.fillStyle = whiteColor;
 ctx.fill();
 ctx.stroke();
 //測試結束
+
+
+function drawChess(){
+    
+}
