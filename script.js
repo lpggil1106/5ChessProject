@@ -1,7 +1,7 @@
 //宣告Canvas
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
-
+var chessRecordSets = [];
 //宣告isBlack, 回合顯示
 var isBlack = true;
 var roundShow = document.getElementById("Cside");
@@ -17,19 +17,19 @@ whiteColor.addColorStop(0.6, "white");
 whiteColor.addColorStop(1, "black");
 
 
-//棋盤繪製(包含重製)
+//棋盤繪製(包含重製落子紀錄)
 function drawBoard(){
-
+    
+    console.clear();
+    chessRecordSets =[];
     //繪製棋盤底()  底色=白色(reset)
-    ctx.clear;
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 0.5;
     ctx.fillStyle = '#ffffff';
     
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    console.log(ctx.canvas.height);
-    console.log(ctx.canvas.width);
+
 
     //繪製棋格
     ctx.strokeStyle = 'gray';
@@ -70,11 +70,6 @@ drawBoard();
 // ctx.stroke();
 //測試結束
 
-
-function drawChess(){
-    
-}
-
 //繪製黑子function
 function drawBlack(xGrid, yGrid){
     var blackColor = ctx.createLinearGradient(xGrid - 25, yGrid - 25, xGrid + 25, yGrid + 25);
@@ -102,9 +97,37 @@ function drawWhite(xGrid, yGrid){
     ctx.stroke();
 }
 
+//重複落子排除
+function isCrowded(chessRecord){
+    for(let i = 0; i < chessRecordSets.length; i++){
+        // console.log(chessRecord +":"+ chessRecordSets[i]); 排除問題用
+        var temp = true;
+        for(let j = 0; j < 2; j++){
+            temp *= chessRecord[j] == chessRecordSets[i][j];    
+        }
+        if(temp == 1){
+            return true;
+        }
+    }
+    return false;
+}
+
+//查詢紀錄
+function checkRecord(){
+    console.clear();
+    for(let i = 0; i < chessRecordSets.length; i++){
+        var structure = chessRecordSets[i];
+        var int1 = structure[0];
+        var int2 = structure[1];
+        var bool = structure[2];
+
+        console.log("x:", int1, "y:", int2, "顏色:", bool);
+    }
+}
+
 //座標測試 X座標公式 : (2*點擊X絕對位置 - 當前視窗寬度)/100 + 7
 //        Y座標公式 : (點擊Y絕對位置-100)/50
-
+//點擊觸發落子事件
 c.addEventListener ('click', event => {
     var clickX = event.clientX;
     var clicky = event.clientY;
@@ -114,16 +137,28 @@ c.addEventListener ('click', event => {
     var xCoordinate = Math.round((2*clickX - clientWidth)/100 + 7);
     var yCoordinate = Math.round((clicky - 100)/50);
 
-    console.log("x:" + xCoordinate + " y:" + yCoordinate);
-
+    // console.log("x:" + xCoordinate + " y:" + yCoordinate);
+    
     //Canvas Grid Ex:[450, 450],[900, 550]
     var xGrid = (xCoordinate + 1) * 50;
     var yGrid = (yCoordinate + 1) * 50;
+    
 
-    //繪製黑色棋子
+    //繪製棋子
     if(xCoordinate >= 0 && yCoordinate >= 0 && xCoordinate < 15 && yCoordinate < 15){
+        //判斷是否重複落子
+        let temp = [xCoordinate, yCoordinate , (isBlack)?"黑":"白"];
+        if(isCrowded(temp)){
+            alert("請勿重複落子");
+            return;
+        }
+
+        //紀錄落子資料
+        chessRecordSets.push([xCoordinate, yCoordinate, (isBlack)?"黑":"白"]);
+
         if(isBlack){
             drawBlack(xGrid, yGrid);
+            
             isBlack = false;
             roundShow.innerText = "白子的回合"
 
