@@ -56,6 +56,7 @@ ctx.fillStyle = blackColor;
 ctx.fill();
 ctx.stroke();
 ctx.beginPath();
+ctx.strokeStyle = 'black';
 ctx.arc(500, 500, 18, 0, 2 * Math.PI);
 ctx.fillStyle = whiteColor;
 ctx.fill();
@@ -66,3 +67,20 @@ ctx.stroke();
 function drawChess(){
     
 }
+
+
+//座標測試 X座標公式 : (2*點擊X絕對位置 - 當前視窗寬度)/100 + 7
+//        Y座標公式 : (點擊Y絕對位置-100)/50
+
+c.addEventListener ('click', event => {
+    console.log(`x: ${event.clientX}, y: ${event.clientY}`)
+    var clickX = event.clientX;
+    var clicky = event.clientY;
+    var clientWidth = window.innerWidth;
+
+    var xCoordinate = Math.round((2*clickX - clientWidth)/100 + 7);
+    var yCoordinate = Math.round((clicky - 100)/50);
+
+    console.log("x: " + xCoordinate);
+    console.log("y: " + yCoordinate);
+  })
