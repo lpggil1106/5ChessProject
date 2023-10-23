@@ -129,13 +129,24 @@ function checkRecord(){
 //        Y座標公式 : (點擊Y絕對位置-100)/50
 //點擊觸發落子事件
 c.addEventListener ('click', event => {
-    var clickX = event.clientX;
-    var clicky = event.clientY;
-    var clientWidth = window.innerWidth;
+    //被廢除的座標系統: event.clientX (從視窗左上角開始算 滑動視窗後沒辦法正常作用)
+    // var clickX = event.clientX;
+    // var clickY = event.clientY;
+    // var xCoordinate = Math.round((2*clickX - clientWidth)/100 + 7);
+    // var clientWidth = window.innerWidth;
+
+    //嘗試offx, y 對座標影響(測試))
+    // var offx = event.offsetX;
+    // var offy = event.offsetY;
+
+
+    // //新座標系統測試(出問題刪除)
+    var clickX = event.offsetX + 48;
+    var clickY = event.offsetY + 48;
 
     //坐標系 Ex: [0, 0],[7, 8]
-    var xCoordinate = Math.round((2*clickX - clientWidth)/100 + 7);
-    var yCoordinate = Math.round((clicky - 100)/50);
+    var xCoordinate = Math.round((clickX -100)/50);
+    var yCoordinate = Math.round((clickY - 100)/50);
 
     // console.log("x:" + xCoordinate + " y:" + yCoordinate);
     
