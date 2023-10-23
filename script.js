@@ -20,8 +20,8 @@ whiteColor.addColorStop(1, "black");
 //棋盤繪製(包含重製落子紀錄)
 function drawBoard(){
     
-    console.clear();
-    chessRecordSets =[];
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);//清空棋盤
+    chessRecordSets =[];//落子紀錄重製
     //繪製棋盤底()  底色=白色(reset)
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 0.5;
@@ -29,20 +29,22 @@ function drawBoard(){
     
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-
+    
+    
     //繪製棋格
-    ctx.strokeStyle = 'gray';
+    ctx.strokeStyle = 'black';
     for(let i = 1; i < 16; i ++){
+        ctx.beginPath(); //消除奇怪空格
         ctx.moveTo(50, 50 * i);
         ctx.lineTo(750, 50 * i);
         ctx.stroke();
 
+        ctx.beginPath();
         ctx.moveTo(50 * i, 50);
         ctx.lineTo(50 * i, 750);
         ctx.stroke();
     };
-
+    
     //繪製中心點
     ctx.beginPath();
     ctx.arc(400, 400, 6, 0, 2 * Math.PI);
@@ -140,13 +142,13 @@ c.addEventListener ('click', event => {
     // var offy = event.offsetY;
 
 
-    // //新座標系統測試(出問題刪除)
+    // //新座標系統測試(成功)
     var clickX = event.offsetX + 48;
     var clickY = event.offsetY + 48;
 
     //坐標系 Ex: [0, 0],[7, 8]
     var xCoordinate = Math.round((clickX -100)/50);
-    var yCoordinate = Math.round((clickY - 100)/50);
+    var yCoordinate = Math.round((clickY -100)/50);
 
     // console.log("x:" + xCoordinate + " y:" + yCoordinate);
     
