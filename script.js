@@ -2,6 +2,8 @@
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 var chessRecordSets = [];
+var blackChessSets = [];
+var whiteChessSets = [];
 //宣告isBlack, 回合顯示
 var isBlack = true;
 var roundShow = document.getElementById("Cside");
@@ -127,6 +129,22 @@ function checkRecord(){
     }
 }
 
+//從記錄分離出黑/白子 isBlack輸入1 目標為黑子 反之目標為白子
+
+const vectorCheck = [
+    [1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1, -1]
+];//宣告向量
+function ifEnd(chessSets){
+    for(let i = 0; i < vectorCheck.length; i++){
+        for(let j = 0; j < chessRecordSets.length; j++){
+            for(let k = 0;k< chessRecordSets.length; k++){
+
+            }
+        }
+    }
+}
+
+
 //座標測試 X座標公式 : (2*點擊X絕對位置 - 當前視窗寬度)/100 + 7
 //        Y座標公式 : (點擊Y絕對位置-100)/50
 //點擊觸發落子事件
@@ -146,39 +164,40 @@ c.addEventListener ('click', event => {
     var clickX = event.offsetX + 48;
     var clickY = event.offsetY + 48;
 
+
     //坐標系 Ex: [0, 0],[7, 8]
     var xCoordinate = Math.round((clickX -100)/50);
     var yCoordinate = Math.round((clickY -100)/50);
-
     // console.log("x:" + xCoordinate + " y:" + yCoordinate);
     
     //Canvas Grid Ex:[450, 450],[900, 550]
     var xGrid = (xCoordinate + 1) * 50;
     var yGrid = (yCoordinate + 1) * 50;
-    
 
     //繪製棋子
     if(xCoordinate >= 0 && yCoordinate >= 0 && xCoordinate < 15 && yCoordinate < 15){
         //判斷是否重複落子
         let temp = [xCoordinate, yCoordinate , (isBlack)?"黑":"白"];
+
         if(isCrowded(temp)){
             alert("請勿重複落子");
             return;
-        }
+        } 
 
         //紀錄落子資料
-        chessRecordSets.push([xCoordinate, yCoordinate, (isBlack)?"黑":"白"]);
+        chessRecordSets.push(temp);
 
         if(isBlack){
             drawBlack(xGrid, yGrid);
-            
+            blackChessSets.push([xCoordinate, yCoordinate]);
             isBlack = false;
-            roundShow.innerText = "白子的回合"
+            roundShow.innerText = "白子的回合";
 
         }else{
             drawWhite(xGrid, yGrid);
+            whiteChessSets.push([xCoordinate, yCoordinate]);
             isBlack = true;
-            roundShow.innerText = "黑子的回合"
+            roundShow.innerText = "黑子的回合";
         }
     }
   })
