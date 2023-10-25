@@ -4,6 +4,7 @@ var ctx = c.getContext("2d");
 var chessRecordSets = [];
 var blackChessSets = [];
 var whiteChessSets = [];
+var ifOver = false;
 //宣告isBlack, 回合顯示
 var isBlack = true;
 var roundShow = document.getElementById("Cside");
@@ -23,7 +24,10 @@ whiteColor.addColorStop(1, "black");
 function drawBoard(){
     
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);//清空棋盤
-    chessRecordSets =[];//落子紀錄重製
+    chessRecordSets = [];//落子紀錄重製
+    blackChessSets = [];
+    whiteChessSets = [];
+    ifOver = false;
     //繪製棋盤底()  底色=白色(reset)
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 0.5;
@@ -36,7 +40,7 @@ function drawBoard(){
     //繪製棋格
     ctx.strokeStyle = 'black';
     for(let i = 1; i < 16; i ++){
-        ctx.beginPath(); //消除奇怪空格
+        ctx.beginPath(); //重製路徑
         ctx.moveTo(50, 50 * i);
         ctx.lineTo(750, 50 * i);
         ctx.stroke();
@@ -81,7 +85,7 @@ function drawBlack(xGrid, yGrid){
     blackColor.addColorStop(0.5, "black");
 
     ctx.beginPath();
-    ctx.arc(xGrid, yGrid, 18, 0, 2 * Math.PI);
+    ctx.arc(xGrid, yGrid, 20, 0, 2 * Math.PI);
     ctx.fillStyle = blackColor;
     ctx.fill();
     ctx.stroke();
@@ -95,7 +99,7 @@ function drawWhite(xGrid, yGrid){
     whiteColor.addColorStop(1, "black");
 
     ctx.beginPath();
-    ctx.arc(xGrid, yGrid, 18, 0, 2 * Math.PI);
+    ctx.arc(xGrid, yGrid, 20, 0, 2 * Math.PI);
     ctx.fillStyle = whiteColor;
     ctx.fill();
     ctx.stroke();
@@ -134,17 +138,59 @@ function checkRecord(){
 const vectorCheck = [
     [1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1, -1]
 ];//宣告向量
-function ifEnd(chessSets){
+function ifEnd(sepRecordSet, now){
     for(let i = 0; i < vectorCheck.length; i++){
-        for(let j = 0; j < chessRecordSets.length; j++){
-            for(let k = 0;k< chessRecordSets.length; k++){
-
+        for(let j = 0; j < sepRecordSet.length; j++){
+            let currX = now[0] + vectorCheck[i][0];
+            let currY = now[1] + vectorCheck[i][1];
+            if(currX == sepRecordSet[j][0] &&
+            currY == sepRecordSet[j][1]){
+                let count = 2;
+                soloVector(sepRecordSet, [currX, currY], vectorCheck[i], 2);
             }
         }
     }
+    return;
 }
 
+function soloVector(sepRecordSet, now, vector, count){
 
+    let currX = now[0] + vector[0];
+    let currY = now[1] + vector[1];
+    for(let i = 0; i < sepRecordSet.length; i++){
+            if(currX == sepRecordSet[i][0] &&
+            currY == sepRecordSet[i][1]){
+                count++;
+                if(count >= 5){
+                    ifOver = true;
+                }
+                soloVector(sepRecordSet, [currX, currY], vector, count);
+            }
+    }
+    return;
+}
+
+//落子位置顯示(有點太難)
+// c.addEventListener('mousemove', event =>{
+//     var hoverX = event.offsetX + 48;
+//     var hoverY = event.offsetY + 48;
+// 
+//     var xCoordinate = Math.round((hoverX -100)/50);
+//     var yCoordinate = Math.round((hoverY -100)/50);
+// 
+//     var xGrid = (xCoordinate + 1) * 50;
+//     var yGrid = (yCoordinate + 1) * 50;
+// 
+//     if(xCoordinate >= 0 && yCoordinate >= 0 && xCoordinate < 15 && yCoordinate < 15){
+//         if(isBlack){
+//             drawBlack(xGrid, yGrid);
+// 
+//         }else{
+//             drawWhite(xGrid, yGrid);
+//         }
+//     }
+//     console.log(hoverX, hoverY);
+// })
 //座標測試 X座標公式 : (2*點擊X絕對位置 - 當前視窗寬度)/100 + 7
 //        Y座標公式 : (點擊Y絕對位置-100)/50
 //點擊觸發落子事件
@@ -189,12 +235,20 @@ c.addEventListener ('click', event => {
 
         if(isBlack){
             drawBlack(xGrid, yGrid);
+            ifEnd(blackChessSets, [xCoordinate, yCoordinate]);
+            if(ifOver){
+                alert("遊戲結束，黑子勝利");
+            }
             blackChessSets.push([xCoordinate, yCoordinate]);
             isBlack = false;
             roundShow.innerText = "白子的回合";
 
         }else{
             drawWhite(xGrid, yGrid);
+            ifEnd(whiteChessSets, [xCoordinate, yCoordinate]);
+            if(ifOver){
+                alert("遊戲結束，白子勝利");
+            }
             whiteChessSets.push([xCoordinate, yCoordinate]);
             isBlack = true;
             roundShow.innerText = "黑子的回合";
