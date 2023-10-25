@@ -5,6 +5,7 @@ var chessRecordSets = [];
 var blackChessSets = [];
 var whiteChessSets = [];
 var ifOver = false;
+var aiMode = false;
 //宣告isBlack, 回合顯示
 var isBlack = true;
 var roundShow = document.getElementById("Cside");
@@ -105,6 +106,22 @@ function drawWhite(xGrid, yGrid){
     ctx.stroke();
 }
 
+//AI回合動作
+function aiAction(chessRecordSets){
+    var scoreBoard = boardScores(chessRecordSets);
+    return choose(scoreBoard);
+}
+
+//產生二維數組 每格依照規則打分return scoreBoard[][];
+function boardScores(chessRecordSets){
+
+}
+
+//決定落子位置 return[x, y];
+function choose(scoreBoard){
+
+}
+
 //重複落子排除
 function isCrowded(chessRecord){
     for(let i = 0; i < chessRecordSets.length; i++){
@@ -170,7 +187,7 @@ function soloVector(sepRecordSet, now, vector, count){
     return;
 }
 
-//落子位置顯示(有點太難)
+//落子位置顯示(未完成)
 // c.addEventListener('mousemove', event =>{
 //     var hoverX = event.offsetX + 48;
 //     var hoverY = event.offsetY + 48;
@@ -223,35 +240,41 @@ c.addEventListener ('click', event => {
     //繪製棋子
     if(xCoordinate >= 0 && yCoordinate >= 0 && xCoordinate < 15 && yCoordinate < 15){
         //判斷是否重複落子
-        let temp = [xCoordinate, yCoordinate , (isBlack)?"黑":"白"];
-
-        if(isCrowded(temp)){
-            alert("請勿重複落子");
-            return;
-        } 
-
-        //紀錄落子資料
-        chessRecordSets.push(temp);
-
-        if(isBlack){
-            drawBlack(xGrid, yGrid);
-            ifEnd(blackChessSets, [xCoordinate, yCoordinate]);
-            if(ifOver){
-                alert("遊戲結束，黑子勝利");
-            }
-            blackChessSets.push([xCoordinate, yCoordinate]);
-            isBlack = false;
-            roundShow.innerText = "白子的回合";
-
+        if(aiMode){
         }else{
-            drawWhite(xGrid, yGrid);
-            ifEnd(whiteChessSets, [xCoordinate, yCoordinate]);
-            if(ifOver){
-                alert("遊戲結束，白子勝利");
+            let temp = [xCoordinate, yCoordinate , (isBlack)?"黑":"白"];
+    
+            if(isCrowded(temp)){
+                alert("請勿重複落子");
+                return;
+            } 
+    
+            //紀錄落子資料
+            chessRecordSets.push(temp);
+    
+            if(isBlack){
+                drawBlack(xGrid, yGrid);
+                ifEnd(blackChessSets, [xCoordinate, yCoordinate]);
+                if(ifOver){
+                    alert("遊戲結束，黑子勝利");
+                }
+                blackChessSets.push([xCoordinate, yCoordinate]);
+                isBlack = false;
+                roundShow.innerText = "白子的回合";
+    
+            }else{
+                drawWhite(xGrid, yGrid);
+                ifEnd(whiteChessSets, [xCoordinate, yCoordinate]);
+                if(ifOver){
+                    alert("遊戲結束，白子勝利");
+                }
+                whiteChessSets.push([xCoordinate, yCoordinate]);
+                isBlack = true;
+                roundShow.innerText = "黑子的回合";
             }
-            whiteChessSets.push([xCoordinate, yCoordinate]);
-            isBlack = true;
-            roundShow.innerText = "黑子的回合";
+
         }
+
     }
-  })
+}
+)
