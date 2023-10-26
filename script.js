@@ -114,15 +114,43 @@ function aiAction(chessRecordSets){
 
 const vector = [[0,-1],[1, -1],[1, 0],[1,1]];
 //產生二維數組 每格依照規則打分return scoreBoard[][];
-function boardScores(chessRecordSets){
+//測試
+
+function boardScores(chessRecordSets, myChessSets, opponentChessSets){
     var scoreBoard = [];
     for(let i = 0; i < 15 ; i++){ //i = y軸 j = x軸
         scoreBoard.push([]);
         for(let j = 0; j < 15; j++){
-            for(let[vj, vi] of vector){
+            let score = 0;
+            vector.forEach((vec) => {
+                let myTemp = comboCount(myChessSets, vec, [j,i]);
+                let OpponentTemp = comboCount(opponentChessSets, vec,[j,i]);
+                if(hasArray(chessRecordSets, [j,i])){
+                    score = 0;
+                    scoreBoard[i][j].push(score);
+                    return
+                }
+                if(myTemp >= 5){
+                    score += 800000;
+                }else if(myTemp = 4){
+                    score += 15000;
+                }else if(myTemp = 3){
+                    score += 800;
+                }else if(myTemp = 2){
+                    score += 35
+                }
 
-            }
-            scoreBoard[i].push();
+                if(OpponentTemp >= 5){
+                    score += 100000;
+                }else if(OpponentTemp = 4){
+                    score += 8000;
+                }else if(OpponentTemp = 3){
+                    score += 400;
+                }else if(OpponentTemp = 2){
+                    score += 15;
+                }
+            });
+            scoreBoard[i][j].push(score);
         }
     }
 }
@@ -163,38 +191,7 @@ function checkRecord(){
 
 //從記錄分離出黑/白子 isBlack輸入1 目標為黑子 反之目標為白子
 
-//無法正常作用的ifEnd function
-// function ifEnd(sepRecordSet, now){
-//     for(let i = 0; i < vectorCheck.length; i++){
-//         for(let j = 0; j < sepRecordSet.length; j++){
-//             let currX = now[0] + vectorCheck[i][0];
-//             let currY = now[1] + vectorCheck[i][1];
-//             if(currX == sepRecordSet[j][0] &&
-//             currY == sepRecordSet[j][1]){
-//                 let count = 2;
-//                 soloVector(sepRecordSet, [currX, currY], vectorCheck[i], 2);
-//             }
-//         }
-//     }
-//     return;
-// }
-// 
-// function soloVector(sepRecordSet, now, vector, count){
-// 
-//     let currX = now[0] + vector[0];
-//     let currY = now[1] + vector[1];
-//     for(let i = 0; i < sepRecordSet.length; i++){
-//             if(currX == sepRecordSet[i][0] &&
-//             currY == sepRecordSet[i][1]){
-//                 count++;
-//                 if(count >= 5){
-//                     ifOver = true;
-//                 }
-//                 soloVector(sepRecordSet, [currX, currY], vector, count);
-//             }
-//     }
-//     return;
-// }
+
 
 
 //新ifEnd function
@@ -231,7 +228,7 @@ function comboCount(sepRecordSet, vector, now){
 }
 
 function hasArray(target, arr){
-    for(let [x,y] of target){
+    for(let [x,y,] of target){
         if(x == arr[0] && y == arr[1]){
             return true;
         }
@@ -239,6 +236,15 @@ function hasArray(target, arr){
     return false;
 }
 
+for(let i = 0; i < 10; i++){
+    for(let j = 0; j < 10; j++){
+        console.log(i);
+        console.log(j);
+        if(j == 2){
+            break
+        }
+    }
+}
 
 
 //落子位置顯示(未完成)
