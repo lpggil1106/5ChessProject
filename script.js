@@ -112,15 +112,26 @@ function aiAction(chessRecordSets){
     return choose(scoreBoard);
 }
 
+const vector = [[0,-1],[1, -1],[1, 0],[1,1]];
 //產生二維數組 每格依照規則打分return scoreBoard[][];
 function boardScores(chessRecordSets){
+    var scoreBoard = [];
+    for(let i = 0; i < 15 ; i++){ //i = y軸 j = x軸
+        scoreBoard.push([]);
+        for(let j = 0; j < 15; j++){
+            for(let[vj, vi] of vector){
 
+            }
+            scoreBoard[i].push();
+        }
+    }
 }
 
 //決定落子位置 return[x, y];
 function choose(scoreBoard){
 
 }
+
 
 //重複落子排除
 function isCrowded(chessRecord){
@@ -152,40 +163,83 @@ function checkRecord(){
 
 //從記錄分離出黑/白子 isBlack輸入1 目標為黑子 反之目標為白子
 
-const vectorCheck = [
-    [1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1, -1]
-];//宣告向量
+//無法正常作用的ifEnd function
+// function ifEnd(sepRecordSet, now){
+//     for(let i = 0; i < vectorCheck.length; i++){
+//         for(let j = 0; j < sepRecordSet.length; j++){
+//             let currX = now[0] + vectorCheck[i][0];
+//             let currY = now[1] + vectorCheck[i][1];
+//             if(currX == sepRecordSet[j][0] &&
+//             currY == sepRecordSet[j][1]){
+//                 let count = 2;
+//                 soloVector(sepRecordSet, [currX, currY], vectorCheck[i], 2);
+//             }
+//         }
+//     }
+//     return;
+// }
+// 
+// function soloVector(sepRecordSet, now, vector, count){
+// 
+//     let currX = now[0] + vector[0];
+//     let currY = now[1] + vector[1];
+//     for(let i = 0; i < sepRecordSet.length; i++){
+//             if(currX == sepRecordSet[i][0] &&
+//             currY == sepRecordSet[i][1]){
+//                 count++;
+//                 if(count >= 5){
+//                     ifOver = true;
+//                 }
+//                 soloVector(sepRecordSet, [currX, currY], vector, count);
+//             }
+//     }
+//     return;
+// }
+
+
+//新ifEnd function
 function ifEnd(sepRecordSet, now){
-    for(let i = 0; i < vectorCheck.length; i++){
-        for(let j = 0; j < sepRecordSet.length; j++){
-            let currX = now[0] + vectorCheck[i][0];
-            let currY = now[1] + vectorCheck[i][1];
-            if(currX == sepRecordSet[j][0] &&
-            currY == sepRecordSet[j][1]){
-                let count = 2;
-                soloVector(sepRecordSet, [currX, currY], vectorCheck[i], 2);
-            }
+    for(let vec of vector){
+        if(comboCount(sepRecordSet, vec, now) >= 5){
+            ifOver = true;
+        };
+    }
+    return
+}
+
+function comboCount(sepRecordSet, vector, now){
+    let count = 1;
+    let nextTemp = Array.from(now);
+    let lastTemp = Array.from(now);
+    nextTemp[0] += vector[0];
+    nextTemp[1] += vector[1];
+
+    lastTemp[0] -= vector[0];
+    lastTemp[1] -= vector[1];
+    while(hasArray(sepRecordSet, nextTemp)){
+        count++;
+        nextTemp[0] += vector[0];
+        nextTemp[1] += vector[1];
+    }
+    while(hasArray(sepRecordSet, lastTemp)){
+        count++;
+        lastTemp[0] -= vector[0];
+        lastTemp[1] -= vector[1];
+    }
+    
+    return count;
+}
+
+function hasArray(target, arr){
+    for(let [x,y] of target){
+        if(x == arr[0] && y == arr[1]){
+            return true;
         }
     }
-    return;
+    return false;
 }
 
-function soloVector(sepRecordSet, now, vector, count){
 
-    let currX = now[0] + vector[0];
-    let currY = now[1] + vector[1];
-    for(let i = 0; i < sepRecordSet.length; i++){
-            if(currX == sepRecordSet[i][0] &&
-            currY == sepRecordSet[i][1]){
-                count++;
-                if(count >= 5){
-                    ifOver = true;
-                }
-                soloVector(sepRecordSet, [currX, currY], vector, count);
-            }
-    }
-    return;
-}
 
 //落子位置顯示(未完成)
 // c.addEventListener('mousemove', event =>{
@@ -210,6 +264,9 @@ function soloVector(sepRecordSet, now, vector, count){
 // })
 //座標測試 X座標公式 : (2*點擊X絕對位置 - 當前視窗寬度)/100 + 7
 //        Y座標公式 : (點擊Y絕對位置-100)/50
+
+
+
 //點擊觸發落子事件
 c.addEventListener ('click', event => {
     //被廢除的座標系統: event.clientX (從視窗左上角開始算 滑動視窗後沒辦法正常作用)
