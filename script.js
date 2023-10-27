@@ -223,6 +223,7 @@ function checkRecord(){
 
 
 
+
 //新ifEnd function
 function ifEnd(sepRecordSet, now, color){
     for(let vec of vector){
@@ -263,7 +264,7 @@ function comboCount(sepRecordSet, vector, now){
 }
 
 function hasArray(target, arr){
-    for(let [x,y] of target){
+    for(let [x,y,] of target){
         if(x == arr[0] && y == arr[1]){
             return true;
         }
@@ -272,6 +273,16 @@ function hasArray(target, arr){
 }
 
 
+
+for(let i = 0; i < 10; i++){
+    for(let j = 0; j < 10; j++){
+        console.log(i);
+        console.log(j);
+        if(j == 2){
+            break
+        }
+    }
+}
 
 
 //落子位置顯示(未完成)
