@@ -4,8 +4,8 @@ var ctx = c.getContext("2d");
 var chessRecordSets = [];
 var blackChessSets = [];
 var whiteChessSets = [];
-var ifOver = false;
-var aiMode = false;
+var notOver = true;
+var aiMode = true;
 //宣告isBlack, 回合顯示
 var isBlack = true;
 var roundShow = document.getElementById("Cside");
@@ -28,7 +28,7 @@ function drawBoard(){
     chessRecordSets = [];//落子紀錄重製
     blackChessSets = [];
     whiteChessSets = [];
-    ifOver = false;
+    notOver = true;
     //繪製棋盤底()  底色=白色(reset)
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 0.5;
@@ -107,29 +107,86 @@ function drawWhite(xGrid, yGrid){
 }
 
 //AI回合動作
-function aiAction(chessRecordSets){
-    var scoreBoard = boardScores(chessRecordSets);
+function aiAction(chessRecordSets, myChessSets, opponentChessSets){
+    var scoreBoard = boardScores(chessRecordSets, myChessSets, opponentChessSets);
     return choose(scoreBoard);
 }
 
 const vector = [[0,-1],[1, -1],[1, 0],[1,1]];
 //產生二維數組 每格依照規則打分return scoreBoard[][];
-function boardScores(chessRecordSets){
+
+function printBoard(scoreBoard){//測試boardScores功能(記得刪掉)
+    var numRows = scoreBoard.length;
+    var numCols = scoreBoard[0].length;
+    
+    console.log("二维数组内容：");
+    console.log("---------------");
+    
+    for (var i = 0; i < numRows; i++) {
+        var rowStr = "|";
+        for (var j = 0; j < numCols; j++) {
+            rowStr += " " + scoreBoard[i][j] + " |";
+        }
+        console.log(rowStr);
+        console.log("---------------");
+    }
+}
+
+function boardScores(chessRecordSets, myChessSets, opponentChessSets){
     var scoreBoard = [];
     for(let i = 0; i < 15 ; i++){ //i = y軸 j = x軸
-        scoreBoard.push([]);
+        // scoreBoard.push([]);
         for(let j = 0; j < 15; j++){
-            for(let[vj, vi] of vector){
-
+            let score = 0;
+            vector.forEach((vec) => {
+                let myTemp = comboCount(myChessSets, vec, [i,j]);
+                let OpponentTemp = comboCount(opponentChessSets, vec,[i,j]);
+                if(hasArray(chessRecordSets, [i,j])){
+                    score = -100000000;
+                }
+                else{
+                    if(myTemp >= 5){
+                        score += 8000000;
+                    }else if(myTemp == 4){
+                        score += 15000;
+                    }else if(myTemp == 3){
+                        score += 800;
+                    }else if(myTemp == 2){
+                        score += 35
+                    }
+    
+                    if(OpponentTemp >= 5){
+                        score += 100000;
+                    }else if(OpponentTemp == 4){
+                        score += 8000;
+                    }else if(OpponentTemp == 3){
+                        score += 400;
+                    }else if(OpponentTemp == 2){
+                        score += 15;
+                    }
+                }
+            });
+            // scoreBoard[i].push(score);
+            if(score != 0){
+                scoreBoard.push([i,j,score]);
             }
-            scoreBoard[i].push();
         }
     }
+    return scoreBoard;
 }
 
 //決定落子位置 return[x, y];
 function choose(scoreBoard){
+    if(scoreBoard == []){
+        return [8,8];
+    }
+    
+    scoreBoard.sort(function(a,b){
+        return b[2] - a[2];
+    })
 
+    var ans = [scoreBoard[0][0] , scoreBoard[0][1]];
+    return ans;
 }
 
 
@@ -163,48 +220,23 @@ function checkRecord(){
 
 //從記錄分離出黑/白子 isBlack輸入1 目標為黑子 反之目標為白子
 
-//無法正常作用的ifEnd function
-// function ifEnd(sepRecordSet, now){
-//     for(let i = 0; i < vectorCheck.length; i++){
-//         for(let j = 0; j < sepRecordSet.length; j++){
-//             let currX = now[0] + vectorCheck[i][0];
-//             let currY = now[1] + vectorCheck[i][1];
-//             if(currX == sepRecordSet[j][0] &&
-//             currY == sepRecordSet[j][1]){
-//                 let count = 2;
-//                 soloVector(sepRecordSet, [currX, currY], vectorCheck[i], 2);
-//             }
-//         }
-//     }
-//     return;
-// }
-// 
-// function soloVector(sepRecordSet, now, vector, count){
-// 
-//     let currX = now[0] + vector[0];
-//     let currY = now[1] + vector[1];
-//     for(let i = 0; i < sepRecordSet.length; i++){
-//             if(currX == sepRecordSet[i][0] &&
-//             currY == sepRecordSet[i][1]){
-//                 count++;
-//                 if(count >= 5){
-//                     ifOver = true;
-//                 }
-//                 soloVector(sepRecordSet, [currX, currY], vector, count);
-//             }
-//     }
-//     return;
-// }
+
 
 
 //新ifEnd function
-function ifEnd(sepRecordSet, now){
+function ifEnd(sepRecordSet, now, color){
     for(let vec of vector){
         if(comboCount(sepRecordSet, vec, now) >= 5){
-            ifOver = true;
+            notOver = false;
+            if(color == "黑"){
+                alert("遊戲結束，黑子勝利");
+                return;
+            }else{
+                alert("遊戲結束，白子勝利");
+                return;
+            }
         };
     }
-    return
 }
 
 function comboCount(sepRecordSet, vector, now){
@@ -238,6 +270,7 @@ function hasArray(target, arr){
     }
     return false;
 }
+
 
 
 
@@ -297,8 +330,7 @@ c.addEventListener ('click', event => {
     //繪製棋子
     if(xCoordinate >= 0 && yCoordinate >= 0 && xCoordinate < 15 && yCoordinate < 15){
         //判斷是否重複落子
-        if(aiMode){
-        }else{
+        
             let temp = [xCoordinate, yCoordinate , (isBlack)?"黑":"白"];
     
             if(isCrowded(temp)){
@@ -311,27 +343,53 @@ c.addEventListener ('click', event => {
     
             if(isBlack){
                 drawBlack(xGrid, yGrid);
-                ifEnd(blackChessSets, [xCoordinate, yCoordinate]);
-                if(ifOver){
-                    alert("遊戲結束，黑子勝利");
+                if(notOver){
+                    ifEnd(blackChessSets, [xCoordinate, yCoordinate],"黑");
                 }
+                // if(notOver){
+                //     alert("遊戲結束，黑子勝利");
+                // }
                 blackChessSets.push([xCoordinate, yCoordinate]);
                 isBlack = false;
                 roundShow.innerText = "白子的回合";
-    
+                
             }else{
+                
                 drawWhite(xGrid, yGrid);
-                ifEnd(whiteChessSets, [xCoordinate, yCoordinate]);
-                if(ifOver){
-                    alert("遊戲結束，白子勝利");
+                if(notOver){
+                    ifEnd(whiteChessSets, [xCoordinate, yCoordinate],"白");
                 }
+                // if(notOver){
+                //     alert("遊戲結束，白子勝利");
+                // }
                 whiteChessSets.push([xCoordinate, yCoordinate]);
                 isBlack = true;
                 roundShow.innerText = "黑子的回合";
             }
 
-        }
+            if(aiMode){
+                console.log(whiteChessSets);
+                var aiMove = aiAction(chessRecordSets, whiteChessSets, blackChessSets);
+                console.log(aiMove);
+                printBoard(boardScores(chessRecordSets, whiteChessSets, blackChessSets));
+                xGrid = (aiMove[0] + 1 ) * 50;
+                yGrid = (aiMove[1] + 1 ) * 50;
+                drawWhite(xGrid, yGrid);
+                chessRecordSets.push([aiMove[0],aiMove[1],"白"]);
+                if(notOver){
+                    ifEnd(whiteChessSets, [aiMove[0], aiMove[1]],"白");
+                }
+                // if(notOver){
+                //     alert("遊戲結束，白子勝利");
+                // }
+                whiteChessSets.push([aiMove[0], aiMove[1]]);
+                isBlack = true;
+                roundShow.innerText = "黑子的回合";
+            }
+        
 
     }
+
+    
 }
 )
