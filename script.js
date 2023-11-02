@@ -8,7 +8,6 @@ var notOver = true;
 var aiMode = true;
 //宣告isBlack, 回合顯示
 var isBlack = true;
-var roundShow = document.getElementById("Cside");
 
 //宣告黑白子漸層顏色 grad公式:
 //對於繪製中心點為(x,y)的黑/白子 colorGrid = ctx.createLinearGradient(x - 25, y - 25, x + 25, y + 25)
@@ -454,7 +453,6 @@ c.addEventListener ('click', event => {
                 // }
                 blackChessSets.push([xCoordinate, yCoordinate]);
                 isBlack = false;
-                roundShow.innerText = "白子的回合";
 
                 //以下目的請見unDrawChess()
                 lastX = -1;
@@ -471,7 +469,6 @@ c.addEventListener ('click', event => {
                 // }
                 whiteChessSets.push([xCoordinate, yCoordinate]);
                 isBlack = true;
-                roundShow.innerText = "黑子的回合";
 
                 //以下目的請見unDrawChess()
                 lastX = -1;
@@ -495,7 +492,6 @@ c.addEventListener ('click', event => {
                 // }
                 whiteChessSets.push([aiMove[0], aiMove[1]]);
                 isBlack = true;
-                roundShow.innerText = "黑子的回合";
             }
         
 
