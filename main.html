@@ -8,15 +8,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="Cside">黑子的回合</div>
     <canvas id="myCanvas" height="800" width="800" ></canvas>
     
     <script src="script.js"></script>
     <div class="buttonSet">
-        <button class="modeBtn">雙打模式</button>
-        <button class="modeBtn">人機模式</button>
+        <button class="modeBtn" onclick="aiMode = false; drawBoard()">雙打模式</button>
+        <button class="modeBtn" onclick="aiMode = true; drawBoard()">人機模式</button>
         <button class="modeBtn" onclick = "checkRecord()">查詢落子紀錄</button>
-        <button class="modeBtn" onclick = "drawBoard()">reset</button>
+        <button class="modeBtn" onclick = "drawBoard()">重製棋盤</button>
     </div>
 </body>
 </html>

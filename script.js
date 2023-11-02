@@ -12,13 +12,13 @@ var roundShow = document.getElementById("Cside");
 
 //宣告黑白子漸層顏色 grad公式:
 //對於繪製中心點為(x,y)的黑/白子 colorGrid = ctx.createLinearGradient(x - 25, y - 25, x + 25, y + 25)
-var blackColor = ctx.createLinearGradient(425, 425, 475, 475);
-blackColor.addColorStop(0, "white");
-blackColor.addColorStop(0.5, "black");
-var whiteColor = ctx.createLinearGradient(475, 475, 525, 525);
-whiteColor.addColorStop(0, "white");
-whiteColor.addColorStop(0.6, "white");
-whiteColor.addColorStop(1, "black");
+// var blackColor = ctx.createLinearGradient(425, 425, 475, 475);
+// blackColor.addColorStop(0, "white");
+// blackColor.addColorStop(0.5, "black");
+// var whiteColor = ctx.createLinearGradient(475, 475, 525, 525);
+// whiteColor.addColorStop(0, "white");
+// whiteColor.addColorStop(0.6, "white");
+// whiteColor.addColorStop(1, "black");
 
 
 //棋盤繪製(包含重製落子紀錄)
@@ -33,8 +33,8 @@ function drawBoard(){
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 0.5;
     ctx.fillStyle = '#ffffff';
-    
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    // 
+    // ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     
     
@@ -223,7 +223,6 @@ function checkRecord(){
 
 
 
-
 //新ifEnd function
 function ifEnd(sepRecordSet, now, color){
     for(let vec of vector){
@@ -264,7 +263,7 @@ function comboCount(sepRecordSet, vector, now){
 }
 
 function hasArray(target, arr){
-    for(let [x,y,] of target){
+    for(let [x,y] of target){
         if(x == arr[0] && y == arr[1]){
             return true;
         }
@@ -272,40 +271,133 @@ function hasArray(target, arr){
     return false;
 }
 
-
-
-for(let i = 0; i < 10; i++){
-    for(let j = 0; j < 10; j++){
-        console.log(i);
-        console.log(j);
-        if(j == 2){
-            break
-        }
+function unDrawChess(xGrid, yGrid){
+    //擦掉
+    ctx.beginPath();
+    ctx.fillStyle = 'white';
+    ctx.fillRect(xGrid-21,yGrid-21,42,42);
+    
+    if(yGrid < 100 && xGrid < 100){//左上
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.moveTo(xGrid, yGrid);
+        ctx.lineTo(xGrid+21, yGrid);
+        ctx.moveTo(xGrid, yGrid);
+        ctx.lineTo(xGrid, yGrid+21);
+        ctx.stroke();
+    }else if(xGrid > 700 && yGrid > 700){//右下
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.moveTo(xGrid-21, yGrid);
+        ctx.lineTo(xGrid, yGrid);
+        ctx.moveTo(xGrid, yGrid-21);
+        ctx.lineTo(xGrid, yGrid);
+        ctx.stroke();
+    }else if(xGrid > 700 && yGrid < 100){//右上
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.moveTo(xGrid-21, yGrid);
+        ctx.lineTo(xGrid, yGrid);
+        ctx.moveTo(xGrid, yGrid);
+        ctx.lineTo(xGrid, yGrid+21);
+        ctx.stroke();
+    }else if(xGrid < 100 && yGrid > 700){
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.moveTo(xGrid, yGrid);
+        ctx.lineTo(xGrid+21, yGrid);
+        ctx.moveTo(xGrid, yGrid-21);
+        ctx.lineTo(xGrid, yGrid);
+        ctx.stroke();
+    }else if(yGrid < 100){//上
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.moveTo(xGrid-21, yGrid);
+        ctx.lineTo(xGrid+21, yGrid);
+        ctx.moveTo(xGrid, yGrid);
+        ctx.lineTo(xGrid, yGrid+21);
+        ctx.stroke();
+    }else if(yGrid > 700){
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.moveTo(xGrid-21, yGrid);
+        ctx.lineTo(xGrid+21, yGrid);
+        ctx.moveTo(xGrid, yGrid-21);
+        ctx.lineTo(xGrid, yGrid);
+        ctx.stroke();
+    }else if(xGrid < 100){//左
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.moveTo(xGrid, yGrid);
+        ctx.lineTo(xGrid+21, yGrid);
+        ctx.moveTo(xGrid, yGrid-21);
+        ctx.lineTo(xGrid, yGrid+21);
+        ctx.stroke();
+    }else if(xGrid > 700){//右
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.moveTo(xGrid-21, yGrid);
+        ctx.lineTo(xGrid, yGrid);
+        ctx.moveTo(xGrid, yGrid-21);
+        ctx.lineTo(xGrid, yGrid+21);
+        ctx.stroke();
+    }else{
+        ctx.beginPath();
+        ctx.strokeStyle = 'black';
+        ctx.moveTo(xGrid-21, yGrid);
+        ctx.lineTo(xGrid+21, yGrid);
+        ctx.moveTo(xGrid, yGrid-21);
+        ctx.lineTo(xGrid, yGrid+21);
+        ctx.stroke();
     }
+    //畫十字
+    // ctx.beginPath();
+    // ctx.strokeStyle = 'black';
+    // ctx.moveTo(xGrid-21, yGrid);
+    // ctx.lineTo(xGrid+21, yGrid);
+    // ctx.moveTo(xGrid, yGrid-21);
+    // ctx.lineTo(xGrid, yGrid+21);
+    // ctx.stroke();
+
+    if(xGrid == 400 && yGrid == 400){
+        ctx.beginPath();
+        ctx.arc(400, 400, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+    }
+
 }
 
+var lastX = -1, lastY = -1;
+// 落子位置顯示(未完成)
+c.addEventListener('mousemove', event =>{
+    var hoverX = event.offsetX + 48;
+    var hoverY = event.offsetY + 48;
 
-//落子位置顯示(未完成)
-// c.addEventListener('mousemove', event =>{
-//     var hoverX = event.offsetX + 48;
-//     var hoverY = event.offsetY + 48;
-// 
-//     var xCoordinate = Math.round((hoverX -100)/50);
-//     var yCoordinate = Math.round((hoverY -100)/50);
-// 
-//     var xGrid = (xCoordinate + 1) * 50;
-//     var yGrid = (yCoordinate + 1) * 50;
-// 
-//     if(xCoordinate >= 0 && yCoordinate >= 0 && xCoordinate < 15 && yCoordinate < 15){
-//         if(isBlack){
-//             drawBlack(xGrid, yGrid);
-// 
-//         }else{
-//             drawWhite(xGrid, yGrid);
-//         }
-//     }
-//     console.log(hoverX, hoverY);
-// })
+    var xCoordinate = Math.round((hoverX -100)/50);
+    var yCoordinate = Math.round((hoverY -100)/50);  
+    
+    if(isCrowded([xCoordinate,yCoordinate])){
+        return;
+    }
+    var xGrid = (xCoordinate + 1) * 50;
+    var yGrid = (yCoordinate + 1) * 50;
+    
+    
+    if(xCoordinate >= 0 && yCoordinate >= 0 && xCoordinate < 15 && yCoordinate < 15){
+        if(xGrid != lastX || yGrid != lastY){
+            unDrawChess(lastX, lastY);
+            lastX = xGrid;
+            lastY = yGrid;
+            return;
+        }
+        if(isBlack){
+            drawBlack(xGrid, yGrid);
+        }else{
+            drawWhite(xGrid, yGrid);
+        }
+    }
+})
 //座標測試 X座標公式 : (2*點擊X絕對位置 - 當前視窗寬度)/100 + 7
 //        Y座標公式 : (點擊Y絕對位置-100)/50
 
@@ -363,6 +455,10 @@ c.addEventListener ('click', event => {
                 blackChessSets.push([xCoordinate, yCoordinate]);
                 isBlack = false;
                 roundShow.innerText = "白子的回合";
+
+                //以下目的請見unDrawChess()
+                lastX = -1;
+                lastY = -1;
                 
             }else{
                 
@@ -376,6 +472,10 @@ c.addEventListener ('click', event => {
                 whiteChessSets.push([xCoordinate, yCoordinate]);
                 isBlack = true;
                 roundShow.innerText = "黑子的回合";
+
+                //以下目的請見unDrawChess()
+                lastX = -1;
+                lastY = -1;
             }
 
             if(aiMode){
