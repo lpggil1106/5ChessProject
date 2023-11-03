@@ -183,8 +183,12 @@ function choose(scoreBoard){
     scoreBoard.sort(function(a,b){
         return b[2] - a[2];
     })
-
-    var ans = [scoreBoard[0][0] , scoreBoard[0][1]];
+    let highest = 0;
+    if(scoreBoard[0][2] - scoreBoard[2][2] < 30){
+        highest = Math.floor(Math.random() * 3);
+    }
+    
+    var ans = [scoreBoard[highest][0] , scoreBoard[highest][1]];
     return ans;
 }
 
@@ -276,93 +280,90 @@ function unDrawChess(xGrid, yGrid){
     ctx.fillStyle = 'white';
     ctx.fillRect(xGrid-21,yGrid-21,42,42);
     
-    if(yGrid < 100 && xGrid < 100){//左上
-        ctx.beginPath();
-        ctx.strokeStyle = 'black';
-        ctx.moveTo(xGrid, yGrid);
-        ctx.lineTo(xGrid+21, yGrid);
-        ctx.moveTo(xGrid, yGrid);
-        ctx.lineTo(xGrid, yGrid+21);
-        ctx.stroke();
-    }else if(xGrid > 700 && yGrid > 700){//右下
-        ctx.beginPath();
-        ctx.strokeStyle = 'black';
-        ctx.moveTo(xGrid-21, yGrid);
-        ctx.lineTo(xGrid, yGrid);
-        ctx.moveTo(xGrid, yGrid-21);
-        ctx.lineTo(xGrid, yGrid);
-        ctx.stroke();
-    }else if(xGrid > 700 && yGrid < 100){//右上
-        ctx.beginPath();
-        ctx.strokeStyle = 'black';
-        ctx.moveTo(xGrid-21, yGrid);
-        ctx.lineTo(xGrid, yGrid);
-        ctx.moveTo(xGrid, yGrid);
-        ctx.lineTo(xGrid, yGrid+21);
-        ctx.stroke();
-    }else if(xGrid < 100 && yGrid > 700){
-        ctx.beginPath();
-        ctx.strokeStyle = 'black';
-        ctx.moveTo(xGrid, yGrid);
-        ctx.lineTo(xGrid+21, yGrid);
-        ctx.moveTo(xGrid, yGrid-21);
-        ctx.lineTo(xGrid, yGrid);
-        ctx.stroke();
-    }else if(yGrid < 100){//上
-        ctx.beginPath();
-        ctx.strokeStyle = 'black';
-        ctx.moveTo(xGrid-21, yGrid);
-        ctx.lineTo(xGrid+21, yGrid);
-        ctx.moveTo(xGrid, yGrid);
-        ctx.lineTo(xGrid, yGrid+21);
-        ctx.stroke();
-    }else if(yGrid > 700){
-        ctx.beginPath();
-        ctx.strokeStyle = 'black';
-        ctx.moveTo(xGrid-21, yGrid);
-        ctx.lineTo(xGrid+21, yGrid);
-        ctx.moveTo(xGrid, yGrid-21);
-        ctx.lineTo(xGrid, yGrid);
-        ctx.stroke();
-    }else if(xGrid < 100){//左
-        ctx.beginPath();
-        ctx.strokeStyle = 'black';
-        ctx.moveTo(xGrid, yGrid);
-        ctx.lineTo(xGrid+21, yGrid);
-        ctx.moveTo(xGrid, yGrid-21);
-        ctx.lineTo(xGrid, yGrid+21);
-        ctx.stroke();
-    }else if(xGrid > 700){//右
-        ctx.beginPath();
-        ctx.strokeStyle = 'black';
-        ctx.moveTo(xGrid-21, yGrid);
-        ctx.lineTo(xGrid, yGrid);
-        ctx.moveTo(xGrid, yGrid-21);
-        ctx.lineTo(xGrid, yGrid+21);
-        ctx.stroke();
-    }else{
-        ctx.beginPath();
-        ctx.strokeStyle = 'black';
-        ctx.moveTo(xGrid-21, yGrid);
-        ctx.lineTo(xGrid+21, yGrid);
-        ctx.moveTo(xGrid, yGrid-21);
-        ctx.lineTo(xGrid, yGrid+21);
-        ctx.stroke();
-    }
-    //畫十字
-    // ctx.beginPath();
-    // ctx.strokeStyle = 'black';
-    // ctx.moveTo(xGrid-21, yGrid);
-    // ctx.lineTo(xGrid+21, yGrid);
-    // ctx.moveTo(xGrid, yGrid-21);
-    // ctx.lineTo(xGrid, yGrid+21);
-    // ctx.stroke();
-
-    if(xGrid == 400 && yGrid == 400){
-        ctx.beginPath();
-        ctx.arc(400, 400, 6, 0, 2 * Math.PI);
-        ctx.fillStyle = 'black';
-        ctx.fill();
+    if (xGrid <= 750 && yGrid <= 750 && xGrid >= 50  && yGrid >= 50) {
+        // 绘制预览效果
+        if(yGrid < 100 && xGrid < 100){//左上
+            ctx.beginPath();
+            ctx.strokeStyle = 'black';
+            ctx.moveTo(xGrid, yGrid);
+            ctx.lineTo(xGrid+21, yGrid);
+            ctx.moveTo(xGrid, yGrid);
+            ctx.lineTo(xGrid, yGrid+21);
+            ctx.stroke();
+        }else if(xGrid > 700 && yGrid > 700){//右下
+            ctx.beginPath();
+            ctx.strokeStyle = 'black';
+            ctx.moveTo(xGrid-21, yGrid);
+            ctx.lineTo(xGrid, yGrid);
+            ctx.moveTo(xGrid, yGrid-21);
+            ctx.lineTo(xGrid, yGrid);
+            ctx.stroke();
+        }else if(xGrid > 700 && yGrid < 100){//右上
+            ctx.beginPath();
+            ctx.strokeStyle = 'black';
+            ctx.moveTo(xGrid-21, yGrid);
+            ctx.lineTo(xGrid, yGrid);
+            ctx.moveTo(xGrid, yGrid);
+            ctx.lineTo(xGrid, yGrid+21);
+            ctx.stroke();
+        }else if(xGrid < 100 && yGrid > 700){
+            ctx.beginPath();
+            ctx.strokeStyle = 'black';
+            ctx.moveTo(xGrid, yGrid);
+            ctx.lineTo(xGrid+21, yGrid);
+            ctx.moveTo(xGrid, yGrid-21);
+            ctx.lineTo(xGrid, yGrid);
+            ctx.stroke();
+        }else if(yGrid < 100){//上
+            ctx.beginPath();
+            ctx.strokeStyle = 'black';
+            ctx.moveTo(xGrid-21, yGrid);
+            ctx.lineTo(xGrid+21, yGrid);
+            ctx.moveTo(xGrid, yGrid);
+            ctx.lineTo(xGrid, yGrid+21);
+            ctx.stroke();
+        }else if(yGrid > 700){
+            ctx.beginPath();
+            ctx.strokeStyle = 'black';
+            ctx.moveTo(xGrid-21, yGrid);
+            ctx.lineTo(xGrid+21, yGrid);
+            ctx.moveTo(xGrid, yGrid-21);
+            ctx.lineTo(xGrid, yGrid);
+            ctx.stroke();
+        }else if(xGrid < 100){//左
+            ctx.beginPath();
+            ctx.strokeStyle = 'black';
+            ctx.moveTo(xGrid, yGrid);
+            ctx.lineTo(xGrid+21, yGrid);
+            ctx.moveTo(xGrid, yGrid-21);
+            ctx.lineTo(xGrid, yGrid+21);
+            ctx.stroke();
+        }else if(xGrid > 700){//右
+            ctx.beginPath();
+            ctx.strokeStyle = 'black';
+            ctx.moveTo(xGrid-21, yGrid);
+            ctx.lineTo(xGrid, yGrid);
+            ctx.moveTo(xGrid, yGrid-21);
+            ctx.lineTo(xGrid, yGrid+21);
+            ctx.stroke();
+        }else{
+            ctx.beginPath();
+            ctx.strokeStyle = 'black';
+            ctx.moveTo(xGrid-21, yGrid);
+            ctx.lineTo(xGrid+21, yGrid);
+            ctx.moveTo(xGrid, yGrid-21);
+            ctx.lineTo(xGrid, yGrid+21);
+            ctx.stroke();
+        }
+    
+        if(xGrid == 400 && yGrid == 400){
+            ctx.beginPath();
+            ctx.arc(400, 400, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = 'black';
+            ctx.fill();
+        }
+    } else {
+        return
     }
 
 }
@@ -382,14 +383,14 @@ c.addEventListener('mousemove', event =>{
     var xGrid = (xCoordinate + 1) * 50;
     var yGrid = (yCoordinate + 1) * 50;
     
+    if(xGrid != lastX || yGrid != lastY){
+        unDrawChess(lastX, lastY);
+        lastX = xGrid;
+        lastY = yGrid;
+        return;
+    }
     
     if(xCoordinate >= 0 && yCoordinate >= 0 && xCoordinate < 15 && yCoordinate < 15){
-        if(xGrid != lastX || yGrid != lastY){
-            unDrawChess(lastX, lastY);
-            lastX = xGrid;
-            lastY = yGrid;
-            return;
-        }
         if(isBlack){
             drawBlack(xGrid, yGrid);
         }else{
