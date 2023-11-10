@@ -11,11 +11,33 @@
     <canvas id="myCanvas" height="800" width="800" ></canvas>
     
     <script src="script.js"></script>
+
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <!-- 落子紀錄或其他內容 -->
+        <h2>落子紀錄</h2>
+        <p>Move 1</p>
+        <p>Move 2</p>   
+        <!-- ... -->
+    </div>
     <div class="buttonSet">
         <button class="modeBtn" onclick="aiMode = false; drawBoard()">雙打模式</button>
         <button class="modeBtn" onclick="aiMode = true; drawBoard() ;isBlack = true;">人機模式</button>
-        <button class="modeBtn" onclick = "checkRecord()">落子紀錄</button>
+        <button class="modeBtn" onclick = "checkRecord() ; openNav()">落子紀錄</button>
         <button class="modeBtn" onclick = "drawBoard()">重製棋盤</button>
     </div>
+
+    <script>
+        // JavaScript部分
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "300px";
+            document.getElementById("myCanvas").style.marginLeft = "0";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("myCanvas").style.marginLeft= "0";
+        }
+    </script>
 </body>
 </html>

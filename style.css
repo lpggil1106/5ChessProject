@@ -1,72 +1,46 @@
 canvas{
-    display:block;
-    border:2px solid black;
-    margin:10px auto;
+  display: block;
+  border: 2px solid black;
+  margin: auto; /* 將 Canvas 永遠置於水平和垂直中央 */
+  position: absolute; /* 使用絕對定位 */
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 以自身寬高的50%進行偏移，使其在中央 */
+  transition: margin-left .5s; /* 保留過渡效果（如果需要的話） */
+  margin-left: 0; /* 保留修正 Canvas 移動到左邊的問題的部分（如果需要的話） */
 }
 
 div{
-    display:block;
-    margin:0 auto;
-    text-align: center;
-    font-size: large;
+  display:block;
+  margin:0 auto;
+  text-align: center;
+  font-size: large;
 }
 
 .buttonSet{
-    text-align: center;
+  text-align: center;
+  position: absolute;
+  top: 91%; /* 調整 top 的值，使其位於 canvas 下方 */
+  width: 100%; /* 設定寬度為100% */
+
 }
 
 .modeBtn{
-    appearance: none;
-    background-color: #000000;
-    border: 2px solid #1A1A1A;
-    border-radius: 15px;
-    box-sizing: border-box;
-    color: #FFFFFF;
-    cursor: pointer;
-    margin:0 50px;
-    font-size: large;
-    display: inline-block;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: normal;
-    margin: 0 30px;
-    min-height: 60px;
-    min-width: 0;
-    outline: none;
-    padding: 16px 24px;
-    text-align: center;
-    text-decoration: none;
-    transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    width: 10%;
-    will-change: transform;
-}
-
-body{
-    margin:0;
-    background-color: rgb(168, 145, 145);
-    height:100vh;
-}
-
-
-/* CSS */
-.button-27 {
   appearance: none;
-  background-color: #000000;
+  background-color: black;
   border: 2px solid #1A1A1A;
   border-radius: 15px;
   box-sizing: border-box;
   color: #FFFFFF;
   cursor: pointer;
+  margin:0 50px;
+  font-size: large;
   display: inline-block;
-  font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
   font-size: 16px;
   font-weight: 600;
   line-height: normal;
-  margin: 0;
-  min-height: 30px;
+  margin: 0 30px;
+  min-height: 60px;
   min-width: 0;
   outline: none;
   padding: 16px 24px;
@@ -76,9 +50,18 @@ body{
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  width: 25%;
+  width: 10%;
   will-change: transform;
 }
+
+body{
+  margin:0;
+  background-color: #B0ACAC;
+  height:100vh;
+}
+
+
+
 
 .modeBtn:disabled {
   pointer-events: none;
@@ -94,3 +77,47 @@ body{
   transform: translateY(0);
 }
 
+/* 新增側邊欄的樣式 */
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: black;
+  color:white;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+/* 設定側邊欄內容的樣式 */
+.sidebar a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+/* 設定側邊欄連結的樣式 */
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+/* 設定側邊欄的按鈕樣式 */
+.closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+/* 設定主要內容向右移動的樣式 */
+.content {
+    transition: margin-left .5s;
+    padding: 16px;
+}
