@@ -22,7 +22,7 @@ var isBlack = true;
 
 //棋盤繪製(包含重製落子紀錄)
 function drawBoard(){
-    
+    refreshRecordUI();
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);//清空棋盤
     chessRecordSets = [];//落子紀錄重製
     blackChessSets = [];
@@ -219,6 +219,28 @@ function checkRecord(){
 
         console.log("x:", int1, "y:", int2, "顏色:", bool);
     }
+}
+
+//更新畫面
+function refreshRecordUI(){
+    $("#chessRecord").empty();
+
+    $.each(chessRecordSets, function (key, obj) {
+        console.log(key);
+        console.log(obj)
+    var recordText =  obj[0] + " , " + obj[1]  ;
+    if(obj[2] == "黑"){
+        var $li = $("<li></li>")
+                .text(recordText)
+                .addClass("list-group-item bg-dark w-50 m-auto");
+    }else{
+        var $li = $("<li></li>")
+                    .text(recordText)
+                    .addClass("list-group-item bg-light text-dark w-50 m-auto");
+    }
+    $li.appendTo("#chessRecord");
+})
+
 }
 
 //從記錄分離出黑/白子 isBlack輸入1 目標為黑子 反之目標為白子
@@ -429,38 +451,37 @@ c.addEventListener ('click', event => {
     //Canvas Grid Ex:[450, 450],[900, 550]
     var xGrid = (xCoordinate + 1) * 50;
     var yGrid = (yCoordinate + 1) * 50;
-
     //繪製棋子
     if(xCoordinate >= 0 && yCoordinate >= 0 && xCoordinate < 15 && yCoordinate < 15){
         //判斷是否重複落子
         
-            let temp = [xCoordinate, yCoordinate , (isBlack)?"黑":"白"];
-    
-            if(isCrowded(temp)){
-                alert("請勿重複落子");
-                $.toast({
-                    heading: 'Error',
-                    text: 'Report any <a href="https://github.com/kamranahmedse/jquery-toast-plugin/issues">issues</a>',
-                    showHideTransition: 'fade',
-                    icon: 'error'
-                })
-                return;
-            } 
-    
-            //紀錄落子資料
-            chessRecordSets.push(temp);
-    
-            if(isBlack){
-                drawBlack(xGrid, yGrid);
-                if(notOver){
-                    ifEnd(blackChessSets, [xCoordinate, yCoordinate],"黑");
-                }
-                // if(notOver){
+        let temp = [xCoordinate, yCoordinate , (isBlack)?"黑":"白"];
+        
+        if(isCrowded(temp)){
+            $.toast({
+                heading: '錯誤',
+                icon: 'error',
+                text: '請勿重複落子',
+                position: 'top-left',
+                stack: 5,
+            })
+            return;
+        } 
+        
+        //紀錄落子資料
+        chessRecordSets.push(temp);
+        
+        if(isBlack){
+            drawBlack(xGrid, yGrid);
+            if(notOver){
+                ifEnd(blackChessSets, [xCoordinate, yCoordinate],"黑");
+            }
+            // if(notOver){
                 //     alert("遊戲結束，黑子勝利");
                 // }
                 blackChessSets.push([xCoordinate, yCoordinate]);
                 isBlack = false;
-
+                
                 //以下目的請見unDrawChess()
                 lastX = -1;
                 lastY = -1;
@@ -472,38 +493,39 @@ c.addEventListener ('click', event => {
                     ifEnd(whiteChessSets, [xCoordinate, yCoordinate],"白");
                 }
                 // if(notOver){
-                //     alert("遊戲結束，白子勝利");
-                // }
-                whiteChessSets.push([xCoordinate, yCoordinate]);
-                isBlack = true;
-
-                //以下目的請見unDrawChess()
-                lastX = -1;
-                lastY = -1;
-            }
-
-            if(aiMode){
-                console.log(whiteChessSets);
-                var aiMove = aiAction(chessRecordSets, whiteChessSets, blackChessSets);
-                console.log(aiMove);
-                printBoard(boardScores(chessRecordSets, whiteChessSets, blackChessSets));
-                xGrid = (aiMove[0] + 1 ) * 50;
-                yGrid = (aiMove[1] + 1 ) * 50;
-                drawWhite(xGrid, yGrid);
-                chessRecordSets.push([aiMove[0],aiMove[1],"白"]);
-                if(notOver){
-                    ifEnd(whiteChessSets, [aiMove[0], aiMove[1]],"白");
+                    //     alert("遊戲結束，白子勝利");
+                    // }
+                    whiteChessSets.push([xCoordinate, yCoordinate]);
+                    isBlack = true;
+                    
+                    //以下目的請見unDrawChess()
+                    lastX = -1;
+                    lastY = -1;
                 }
-                // if(notOver){
-                //     alert("遊戲結束，白子勝利");
-                // }
-                whiteChessSets.push([aiMove[0], aiMove[1]]);
-                isBlack = true;
-            }
-        
-
+                
+                if(aiMode){
+                    console.log(whiteChessSets);
+                    var aiMove = aiAction(chessRecordSets, whiteChessSets, blackChessSets);
+                    console.log(aiMove);
+                    printBoard(boardScores(chessRecordSets, whiteChessSets, blackChessSets));
+                    xGrid = (aiMove[0] + 1 ) * 50;
+                    yGrid = (aiMove[1] + 1 ) * 50;
+                    drawWhite(xGrid, yGrid);
+                    chessRecordSets.push([aiMove[0],aiMove[1],"白"]);
+                    if(notOver){
+                        ifEnd(whiteChessSets, [aiMove[0], aiMove[1]],"白");
+                    }
+                    // if(notOver){
+                        //     alert("遊戲結束，白子勝利");
+                        // }
+                        whiteChessSets.push([aiMove[0], aiMove[1]]);
+                        isBlack = true;
+                    }
+                    
+                    
     }
-
-    
+                
+                
+    refreshRecordUI();
 }
 )

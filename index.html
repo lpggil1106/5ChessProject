@@ -6,9 +6,10 @@
     <link rel="icon" href="./img/images.png" type="image/x-icon" />
     <title>五子棋</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="css/jquery.toast.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
-<body>
+<body style="background-color: #B0ACAC;">
     <canvas id="myCanvas" height="800" width="800" ></canvas>
     
     
@@ -16,26 +17,33 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
         <!-- 落子紀錄或其他內容 -->
         <h2>落子紀錄</h2>
-        <p>Move 1</p>
-        <p>Move 2</p>   
+        <ul id="chessRecord" class="list-group">
+            <li class="list-group-item bg-dark w-50 justify-content-center d-flex">First item</li>
+            <li class="list-group-item bg-dark w-50 justify-content-center d-flex">Second item</li>
+            <li class="list-group-item bg-dark w-50 justify-content-center d-flex">Third item</li>
+        </ul>  
         <!-- ... -->
     </div>
     <div class="buttonSet">
         <button class="modeBtn" onclick="aiMode = false; drawBoard()">雙打模式</button>
         <button class="modeBtn" onclick="aiMode = true; drawBoard() ;isBlack = true;">人機模式</button>
-        <button class="modeBtn" onclick = "checkRecord() ; nav()">落子紀錄</button>
+        <button class="modeBtn" onclick = "checkRecord() ; nav() ; refreshRecordUI()">落子紀錄</button>
         <button class="modeBtn" onclick = "drawBoard()">重製棋盤</button>
     </div>
     
     <!--js 引入-->
-    <script src="js/script.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/jquery.toast.js"></script>
+    
     <script>
         // JavaScript部分
 
+        
         function nav(){
-            if(document.getElementById("mySidebar").style.width == "300px"){
+            if(document.getElementById("mySidebar").style.width == "200px"){
                 closeNav();
             }else{
                 openNav();
@@ -52,6 +60,8 @@
             document.getElementById("mySidebar").style.color = "black";
             document.getElementById("myCanvas").style.marginLeft= "0";
         }
+
+
     </script>
 </body>
 </html>
