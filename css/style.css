@@ -1,6 +1,7 @@
 canvas{
   display: block;
-  border: 2px solid black;
+  border: 2px solid gray;
+  border-radius: 20px;
   margin: auto; /* 將 Canvas 永遠置於水平和垂直中央 */
   position: absolute; /* 使用絕對定位 */
   top: 45%;
@@ -86,7 +87,7 @@ body{
   top: 0;
   left: 0;
   background-color: black;
-  color:white;
+  color:black;
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;

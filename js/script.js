@@ -29,11 +29,10 @@ function drawBoard(){
     whiteChessSets = [];
     notOver = true;
     //繪製棋盤底()  底色=白色(reset)
-    ctx.strokeStyle = 'black';
     ctx.lineWidth = 0.5;
     ctx.fillStyle = '#ffffff';
-    // 
     // ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.fillStyle = "white";
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     
     
@@ -131,6 +130,7 @@ function printBoard(scoreBoard){//測試boardScores功能(記得刪掉)
     }
 }
 
+//AI計算位置分數
 function boardScores(chessRecordSets, myChessSets, opponentChessSets){
     var scoreBoard = [];
     for(let i = 0; i < 15 ; i++){ //i = y軸 j = x軸
@@ -438,6 +438,12 @@ c.addEventListener ('click', event => {
     
             if(isCrowded(temp)){
                 alert("請勿重複落子");
+                $.toast({
+                    heading: 'Error',
+                    text: 'Report any <a href="https://github.com/kamranahmedse/jquery-toast-plugin/issues">issues</a>',
+                    showHideTransition: 'fade',
+                    icon: 'error'
+                })
                 return;
             } 
     
